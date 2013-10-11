@@ -48,11 +48,6 @@
 }
 
 - (void)setupLineViewAndStuff {
-  _lineNumberView = [[NoodleLineNumberView alloc] initWithScrollView:[self enclosingScrollView]];
-  [[self enclosingScrollView] setVerticalRulerView:_lineNumberView];
-  [[self enclosingScrollView] setHasHorizontalRuler:NO];
-  [[self enclosingScrollView] setHasVerticalRuler:YES];
-  [[self enclosingScrollView] setRulersVisible:YES];
   
   [[self textStorage] setDelegate:self];
   
@@ -70,6 +65,17 @@
   [[self textStorage] setAttributedString: [_syntaxHighlighter highlight: [self string]]];
   _tabWidth = 4;
   
+}
+
+- (void)viewDidMoveToSuperview
+{
+    NSScrollView *scrollView = (NSScrollView *)[[self superview] superview];
+    
+    _lineNumberView = [[NoodleLineNumberView alloc] initWithScrollView:scrollView];
+    [scrollView setVerticalRulerView:_lineNumberView];
+    [scrollView setHasHorizontalRuler:NO];
+    [scrollView setHasVerticalRuler:YES];
+    [scrollView setRulersVisible:YES];
 }
 
 - (void)autoInsertText:(NSString*)text {
